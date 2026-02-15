@@ -65,33 +65,17 @@ const client = new MongoClient(uri, {
     // ===============================
     // 🔹 2. Get User by Email
     // ===============================
-    // app.get('/users/:email', async (req, res) => {
-    //   const email = req.params.email;
-    //   const user = await usersCollection.findOne({ email });
+    app.get("/users/:email", async (req, res) => {
+  const email = req.params.email;
+  const user = await usersCollection.findOne({ email });
 
-    //   if (!user) return res.status(404).json({ message: "User not found" });
-    //   res.json(user);
-    // });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
 
-    // ===============================
-    // 🔹 3. Get All Users
-    // ===============================
+  res.json(user);
+});
    
-
-    // ===============================
-    // 🔹 4. Update User Role
-    // ===============================
-    app.patch('/users/role/:id', async (req, res) => {
-      const id = req.params.id;
-      const { role } = req.body;
-
-      const result = await usersCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { role } }
-      );
-      res.json(result);
-    });
-
   } catch (error) {
     console.error(error);
   }
