@@ -25,7 +25,8 @@ const client = new MongoClient(uri, {
     console.log("✅ MongoDB Connected");
 
     const database = client.db("garmentsdb");
-    const usersCollection = database.collection("users"); // সঠিক variable name
+    const usersCollection = database.collection("users"); 
+     const productsCollection = database.collection("allproduct");
 
     // ===============================
     // POST /users - Save new user
@@ -75,6 +76,33 @@ const client = new MongoClient(uri, {
 
   res.json(user);
 });
+
+//product api
+
+// Get all products
+app.get('/allproducts', async (req, res) => {
+  try {
+    const products = await productsCollection.find().toArray();
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get single product by ID
+app.get('/allproducts/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const product = await productsCollection.findOne({ _id: new ObjectId(id) });
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
    
   } catch (error) {
     console.error(error);
